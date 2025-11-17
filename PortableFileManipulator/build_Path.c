@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "build_Path.h"
+
 
 //charecter pointer directory set to address 
 void build_Path(const char *directory, const char  *fileName, char *storeDirectory, size_t dirsize) {

@@ -2,11 +2,10 @@
 
 #include <stdio.h>
 
-void Create_New_File();
-void Edit_Existing_File();
-void build_Path();
-
-
+#include "build_Path.h"
+#include "Edit_Existing_File.h"
+	
+	
 int main() {
 	int choice;
 	while (1) {
