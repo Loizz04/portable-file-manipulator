@@ -5,7 +5,7 @@
 #include <string.h>
 
 //charecter pointer directory set to address 
-void build_Path(const char *directory, const char  *fileName, const *storeDirectory, size_t dirsize) {
+void build_Path(const char *directory, const char  *fileName, char *storeDirectory, size_t dirsize) {
 	size_t len_dir = strlen(directory);
 
 	//we first copy the directory into a directory holder
