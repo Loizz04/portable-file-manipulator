@@ -1,68 +1,92 @@
+// ...existing code...
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+
+int fileOpenOnWindows(char input[]) {
+    // stub for Windows-specific handling; return 0 for now
+    return 0;
+}
 
 int main()
 {
-    // handle the different operating system imports
-    // We can use these to set the value of a variable to handle the differnt directory handling
-    // of MS Windows or UNIX-based Machines.
     #if defined(__unix__)||defined(__APPLE__) 
         char restrictedChar[] = {'/'};
         char pathSeparator = '/';
         char incorrectPathSeparator = '\\';
-        
     #elif defined(_WIN32)||defined(_WIN64)
-        char retrictedChar[] = {'<','>',':','"','/','\\','|','?','*'};
+        char restrictedChar[] = {'<','>',':','"','/','\\','|','?','*'};
         char pathSeparator = '\\';
         char incorrectPathSeparator = '/';
     #endif
-    int sizeRestrictedCharArray = sizeof(restrictedChar)/sizeof(char);
-    int fileCheck = 0;
+
+    int sizeRestrictedCharArray = sizeof(restrictedChar) / sizeof(char);
     FILE *file;
     char input[255] = "";
 
-    // this is all in local dir
-    while(1){
-    while(!strcmp(input,""))
-    {
-        printf("Enter a file you'd like to create, quit() to choose another action, or enter /h  for help: ");
-                scanf("%s",input); 
-        if(!strcmp(input,"/h"))
-        {
-           memset(input, 0, sizeof(input));
-            printf("The Create File function is used to create a new empty file.\n%s%s%s%s",
-                "\nTo use this function a filename  and extension must be entered and a new file will be made in the local directory.",
-                "\nEXAMPLE: file01.log\nEXAMPLE: file02.txt",
-                "\nThe filename must be different from all filenames within the directory, and must not include any restricted characters.",
-                "\nRestricted characters for this system: ");
-            for (int i = 0; i < sizeRestrictedCharArray; i++)
-                printf("%c ", restrictedChar[i]);
-            printf("%s%c","\nIt also must not include the path separator for this system: ",pathSeparator);
-            printf("%s","\nLastly, you must have permission to read and write in the directory you're choosing to create the file in.\n\n");
-            fileCheck = 1;
-            
-            
-        }else if(!strcmp(input, "quit()"))
-        {
+    while (1) {
+        printf("Enter a file you'd like to create, quit() to choose another action, or enter /h for help: ");
+        if (scanf("%254s", input) != 1) {           // safe width specifier
             memset(input, 0, sizeof(input));
-            return EXIT_SUCCESS;
-        }else
-        {
+            continue;
+        }
 
-            for(int i = 0 ;i < sizeRestrictedCharArray; i++)
-            {
-                for(int j = 0; j < sizeof(input)/sizeof(char); j++)
-                {
-                    if (input[j] == restrictedChar[i])
-                    {
-                        printf("%s","You've used an illegal character in your filename.\nPick a new name and try again.\n\n");
-                        memset(input, 0, sizeof(input));
-                    }
+        if (strcmp(input, "/h") == 0) {
+            printf("Create File: enter filename and extension to create in current directory.\n");
+            printf("Restricted characters for this system: ");
+            for (int i = 0; i < sizeRestrictedCharArray; ++i) printf("%c ", restrictedChar[i]);
+            printf("\nPath separator for this system: %c\n\n", pathSeparator);
+            memset(input, 0, sizeof(input));
+            continue;
+        }
+
+        if (strcmp(input, "quit()") == 0) {
+            return EXIT_SUCCESS;
+        }
+
+        // validate restricted characters (only up to actual input length)
+        int invalid = 0;
+        size_t inlen = strlen(input);
+        for (int i = 0; i < sizeRestrictedCharArray && !invalid; ++i) {
+            for (size_t j = 0; j < inlen; ++j) {
+                if (input[j] == restrictedChar[i]) {
+                    invalid = 1;
+                    break;
                 }
             }
         }
-    }
+        if (invalid) {
+            printf("You've used an illegal character in your filename. Pick a new name and try again.\n\n");
+            memset(input, 0, sizeof(input));
+            continue;
+        }
+
+    #if defined(_WIN32) || defined(_WIN64)
+        /* Use only C standard library: check existence with "r" then create with "w".
+           Note: this is not atomic (race possible) but avoids non-standard open()/O_CREAT. */
+        errno = 0;
+        file = fopen(input, "r");
+        if (file != NULL) {
+            /* file exists */
+            fclose(file);
+            printf("File '%s' already exists. Pick a new filename and try again!\n\n", input);
+        } else if (errno != 0 && errno != ENOENT) {
+            /* fopen failed for a reason other than "not found" */
+            perror("fopen");
+            printf("\n");
+        } else {
+            /* file not found — create with "w" (portable C) */
+            file = fopen(input, "w");
+            if (file == NULL) {
+                perror("fopen");
+                printf("\n");
+            } else {
+                printf("Created file '%s'\n\n", input);
+                fclose(file);
+            }
+        }
+    #elif defined(__linux__)
     // This is an fopen mode introduced in C11 that will wrtie if the file doesn't
     // exist, and it fails if the file does
     file = fopen(input,"wx"); 
@@ -73,9 +97,9 @@ int main()
     }else {
     fclose(file);
     }
+    #endif
 
-    memset(input, 0, sizeof(input));
-}
+        memset(input, 0, sizeof(input));
+    }
     return EXIT_SUCCESS;
 }
-    
