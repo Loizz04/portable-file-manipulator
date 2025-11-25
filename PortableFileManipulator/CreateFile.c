@@ -12,7 +12,7 @@ int main()
 {
     // These declaration use macros predefined in the compiler to allow the correct values for
     // for each operating system to be used to make the system less restrictive with legal 
-    // filenames.
+    // filenames
     #if defined(__unix__)||defined(__APPLE__) 
         char restrictedChar[] = {'/'};
         char pathSeparator = '/';
