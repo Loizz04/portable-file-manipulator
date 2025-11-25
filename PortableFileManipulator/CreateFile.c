@@ -8,7 +8,7 @@
  * At the moment, that file is created local to the pofm executable advanced 
  * functionality could be added to allow the function to be used system-wide.
 */
-int main()
+int CreateFile()
 {
     // These declaration use macros predefined in the compiler to allow the correct values for
     // for each operating system to be used to make the system less restrictive with legal 
