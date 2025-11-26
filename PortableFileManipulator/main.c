@@ -9,6 +9,8 @@
 #include <string.h>
 
 #include "Edit_Existing_File.h"
+#include "CreateFile.h"
+//#include "TextFunctions.h"
 
 int main() {
 
@@ -16,11 +18,14 @@ int main() {
 
     while (1) {
 
-        printf("\n====MAIN MENU====\n");
+        printf("==== Welcome to the pofm system ====");
+        printf("\n==== MAIN MENU ====\n");
         printf("\n");
-        printf("1. Edit Existing File\n");
-        printf("2. Help\n");
-        printf("3. Exit Program\n");
+        printf("1. Create new file\n");
+        printf("2. Edit Existing File\n");
+        printf("3. Text Functions\n");
+        printf("4. Help\n");
+        printf("5. Exit\n");
         printf("\nEnter your choice : ");
 
         if (scanf_s("%d", &choice) != 1) {
@@ -38,14 +43,22 @@ int main() {
         switch (choice) {
 
         case 1:
-            Edit_Existing_File();   // <-- call your full menu function
+            CreateFile();   
             break;
 
         case 2:
-            helpfunction(0);        // global help
+            Edit_Existing_File();
             break;
 
         case 3:
+            TextFunctions();
+            break;
+
+        case 4:
+            helpfunction(0);  // global help
+            break;
+
+        case 5:
             printf("Exiting program...\n");
             return 0;
 

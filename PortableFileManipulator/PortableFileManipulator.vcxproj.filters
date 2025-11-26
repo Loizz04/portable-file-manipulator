@@ -26,5 +26,8 @@
     <ClInclude Include="Edit_Existing_File.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="CreateFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
