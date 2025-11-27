@@ -5,10 +5,7 @@ VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PortableFileManipulator", "PortableFileManipulator\PortableFileManipulator.vcxproj", "{7F39BCD4-DA16-41B6-B033-51D840CD2505}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90AD7925-1E89-470D-A178-7E0721A1C180}"
-	ProjectSection(SolutionItems) = preProject
-		..\FileManipulator\FileManipulator.sln = ..\FileManipulator\FileManipulator.sln
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileManipulator", "..\FileManipulator\FileManipulator\FileManipulator.vcxproj", "{A9DC2300-0658-458B-B2AC-FF241058C2D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +23,14 @@ Global
 		{7F39BCD4-DA16-41B6-B033-51D840CD2505}.Release|x64.Build.0 = Release|x64
 		{7F39BCD4-DA16-41B6-B033-51D840CD2505}.Release|x86.ActiveCfg = Release|Win32
 		{7F39BCD4-DA16-41B6-B033-51D840CD2505}.Release|x86.Build.0 = Release|Win32
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Debug|x64.ActiveCfg = Debug|x64
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Debug|x64.Build.0 = Debug|x64
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Debug|x86.ActiveCfg = Debug|Win32
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Debug|x86.Build.0 = Debug|Win32
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Release|x64.ActiveCfg = Release|x64
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Release|x64.Build.0 = Release|x64
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Release|x86.ActiveCfg = Release|Win32
+		{A9DC2300-0658-458B-B2AC-FF241058C2D9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
