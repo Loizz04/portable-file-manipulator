@@ -38,7 +38,7 @@ char incorrectPathSeparator = '\\';
 
 //help function 
 void helpfunction(int mode) {
-    printf("===Edit Existing File Help Function===\n");
+    printf("=== Edit Existing File Help Function ===\n");
     switch (mode) {
 
     case 0: // main menu help

@@ -51,7 +51,7 @@ int main() {
             break;
 
         case 3:
-            TextFunctions();
+            //TextFunctions();
             break;
 
         case 4:

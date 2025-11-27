@@ -21,6 +21,9 @@
     <ClCompile Include="Edit_Existing_File.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CreateFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edit_Existing_File.h">

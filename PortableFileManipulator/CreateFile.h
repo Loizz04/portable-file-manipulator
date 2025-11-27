@@ -12,7 +12,10 @@
 #include <string.h>
 #include <errno.h>
 
+#define _CRT_SECURE_NO_WARNINGS
+
+
 int CreateFile(void);
 
-#endif /* CREATEFILE_H */
+#endif 
 #pragma once

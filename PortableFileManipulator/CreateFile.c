@@ -3,6 +3,9 @@
 #include <string.h>
 #include <errno.h>
 
+#define _CRT_SECURE_NO_WARNINGS
+
+
 /*
 
  * Author : Luke Rossi
