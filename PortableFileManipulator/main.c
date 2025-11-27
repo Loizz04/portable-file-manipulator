@@ -30,7 +30,7 @@ int main() {
         printf("5. Exit\n");
         printf("\nEnter your choice : ");
 
-        if (scanf_s("%d", &choice) != 1) {
+        if (scanf("%d", &choice) != 1) {
 
             printf("Invalid input. Please enter a number.\n");
 
