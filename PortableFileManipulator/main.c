@@ -1,5 +1,5 @@
 /* main.c
-   Calls the Edit Existing File module.
+   calls all functions of pofm
    Author: Lois Mathew
 */
 #define _CRT_SECURE_NO_WARNINGS
@@ -63,7 +63,7 @@ int main() {
             return 0;
 
         default:
-            printf("Invalid input. Enter 1-3.\n");
+            printf("Invalid input. Enter 1-5.\n");
             break;
         }
     }
