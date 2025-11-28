@@ -6,5 +6,6 @@ void append_text();
 void insert_text();
 void clear_file();
 void show_file();
+void text_Functions();
 
 #endif

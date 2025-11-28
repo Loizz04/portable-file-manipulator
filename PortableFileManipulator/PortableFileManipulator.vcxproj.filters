@@ -24,6 +24,9 @@
     <ClCompile Include="CreateFile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Text_Functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edit_Existing_File.h">
@@ -31,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="CreateFile.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="text_ops.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

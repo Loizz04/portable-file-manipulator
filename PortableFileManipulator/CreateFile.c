@@ -1,9 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
-#define _CRT_SECURE_NO_WARNINGS
 
 
 /*
@@ -24,8 +26,8 @@ int CreateFile()
         char incorrectPathSeparator = '\\';
     #elif defined(_WIN32)||defined(_WIN64)
         char restrictedChar[] = {'<','>',':','"','/','\\','|','?','*'};
-        char pathSeparator[] = '\\';
-        char incorrectPathSeparator[] = '/';
+        char pathSeparator[] = { '\\' };
+        char incorrectPathSeparator[] = { '/' };
     #endif
 
     int sizeRestrictedCharArray = sizeof(restrictedChar) / sizeof(char);
