@@ -21,12 +21,21 @@
     <ClCompile Include="Edit_Existing_File.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Text_Functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edit_Existing_File.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="CreateFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Text_Functions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

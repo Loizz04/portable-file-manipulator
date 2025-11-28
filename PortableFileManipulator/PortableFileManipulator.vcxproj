@@ -123,12 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CreateFile.c" />
     <ClCompile Include="Edit_Existing_File.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Text_Functions.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CreateFile.h" />
     <ClInclude Include="Edit_Existing_File.h" />
+    <ClInclude Include="Text_Functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

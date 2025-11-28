@@ -7,13 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "text_ops.h"   // text functions 
+#include "Text_Functions.h"   // text functions 
 
 
 #include "Edit_Existing_File.h"
 #include "CreateFile.h"
-//#include "TextFunctions.h"
-
+//#include "Text_Functions.c"
 
 
 int main() {
