@@ -14,7 +14,7 @@
 
 #include "Edit_Existing_File.h"
 #include "CreateFile.h"
-//#include "Text_Functions.c"
+#include "Text_Functions.c"
 
 
 int main() {
