@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "text_ops.h"   // text functions 
+
 
 #include "Edit_Existing_File.h"
 #include "CreateFile.h"
@@ -51,7 +53,7 @@ int main() {
             break;
 
         case 3:
-            //TextFunctions();
+            text_Functions();
             break;
 
         case 4:
