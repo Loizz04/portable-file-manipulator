@@ -13,7 +13,7 @@
 #define TEXT_OPS_H
 
 // Function declarations
-void text_Functions(void);  // main menu handler
+void Text_Functions(void);  // main menu handler
 void append_text(void);
 void insert_text(void);
 void clear_file(void);

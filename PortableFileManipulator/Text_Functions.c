@@ -18,7 +18,7 @@
 #include "text_ops.h"
 #include <string.h>
 
-#include "Help_Functions.h"    // Include the global help file
+//#include "text_ops.h"    // Include the global help file
 
 // ========================
 // FUNCTION PROTOTYPES
@@ -27,7 +27,7 @@ void insert_text();
 void clear_file();
 void show_file();
 
-void text_Functions() {
+void Text_Functions() {
     int choice;
 
     while (1) {

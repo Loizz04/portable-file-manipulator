@@ -14,6 +14,8 @@
 #include "CreateFile.h"
 //#include "TextFunctions.h"
 
+
+
 int main() {
 
     int choice;
@@ -53,7 +55,7 @@ int main() {
             break;
 
         case 3:
-            text_Functions();
+            Text_Functions();
             break;
 
         case 4:
