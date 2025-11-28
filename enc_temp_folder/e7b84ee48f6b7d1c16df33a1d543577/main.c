@@ -1,9 +1,7 @@
 /* main.c
    calls all functions of pofm
    Author: Lois Mathew
-   Revised by: Rawan Genina // help function part + text functions 
 */
-
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
