@@ -131,7 +131,7 @@
   <ItemGroup>
     <ClInclude Include="CreateFile.h" />
     <ClInclude Include="Edit_Existing_File.h" />
-    <ClInclude Include="text_ops.h" />
+    <ClInclude Include="Text_Functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

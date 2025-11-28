@@ -1,18 +1,21 @@
 /* main.c
    calls all functions of pofm
    Author: Lois Mathew
+   Revised by: Rawan Genina // help function part + text functions 
 */
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "text_ops.h"   // text functions 
+#include "Text_Functions.h"   // text functions 
 
 
 #include "Edit_Existing_File.h"
 #include "CreateFile.h"
-//#include "TextFunctions.h"
+//#include "Text_Functions.c"
+
 
 int main() {
 
@@ -53,7 +56,7 @@ int main() {
             break;
 
         case 3:
-            text_Functions();
+            Text_Functions();
             break;
 
         case 4:

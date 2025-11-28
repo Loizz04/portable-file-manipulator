@@ -1,11 +1,7 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-
 
 
 /*
@@ -26,8 +22,8 @@ int CreateFile()
         char incorrectPathSeparator = '\\';
     #elif defined(_WIN32)||defined(_WIN64)
         char restrictedChar[] = {'<','>',':','"','/','\\','|','?','*'};
-        char pathSeparator[] = { '\\' };
-        char incorrectPathSeparator[] = { '/' };
+        char pathSeparator[] = '\\';
+        char incorrectPathSeparator[] = '/';
     #endif
 
     int sizeRestrictedCharArray = sizeof(restrictedChar) / sizeof(char);
@@ -37,7 +33,7 @@ int CreateFile()
     // This loop allows for the function to be used continually, or exited based on the user's input
     while (1) {
         printf("Enter a file you'd like to create, quit() to choose another action, or enter /h for help: ");
-        scanf("%254s", input);
+        scanf_s("%254s", input);//
 
         // Implementation of the help function
         if (strcmp(input, "/h") == 0) {

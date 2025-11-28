@@ -1,160 +1,263 @@
+
+/* Text_Functions.c
+
+   Author: Rawan Genina
+
+   Declarations for text file operations:
+   - Append text to an existing file
+   - Insert text at a specified position
+   - Clear all contents of a file
+   - Display file contents with pagination
+   - Menu function for text operations
+   - Calls helpfunction() for context-sensitive help
+*/
+
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "text_ops.h"
+#include "Text_Functions.h"
 #include <string.h>
 
-// ========================
-// FUNCTION PROTOTYPES
+// Provides help for all text file operations
+static void Text_Functions_Help(int mode) {
+    switch (mode) {
+    case 0: // Main Text Functions menu
+        printf("=== Text Functions Help ===\n");
+        printf("1. Append text to a file\n");
+        printf("2. Insert text at a specific position in a file\n");
+        printf("3. Clear all contents of a file\n");
+        printf("4. Show file contents with pagination\n");
+        printf("5. Help\n");
+        printf("6. Exit text operations menu\n\n");
+        break;
+    case 5: // Append text help
+        printf("Append Text Help:\n");
+        printf("Enter filename, then text to append. Text will be added to the end of the file.\n\n");
+        break;
+    case 6: // Insert text help
+        printf("Insert Text Help:\n");
+        printf("Enter filename, text to insert, and character position.\n");
+        printf("Text will be inserted at the given position.\n\n");
+        break;
+    case 7: // Clear file help
+        printf("Clear File Help:\n");
+        printf("Enter filename. All content of the file will be deleted permanently.\n\n");
+        break;
+    case 8: // Show file help
+        printf("Show File Help:\n");
+        printf("Enter filename and number of lines per page.\n");
+        printf("The content will be displayed page by page.\n\n");
+        break;
+    default:
+        printf("Unknown help topic.\n");
+        break;
+    }
+}
 
+// Text Operations (FUNCTION PROTOTYPES)
 void append_text();
 void insert_text();
 void clear_file();
 void show_file();
 
-void text_Functions() {
+void Text_Functions() {
     int choice;
 
+    //infintie loop //keep showing the menu until user chooses Exit 
     while (1) {
+        // Menu List 
         printf("=== FileManipulator Menu ===\n");
         printf("1. Append text to file\n");
         printf("2. Insert text in file\n");
         printf("3. Clear file\n");
         printf("4. Show file content\n");
-        printf("5. Exit\n");
+        printf("5. Help\n");  // help option
+        printf("6. Exit\n");  // Adjusted exit to 6 to include help as 5
         printf("Enter your choice: ");
 
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input!\n");
-            while (getchar() != '\n');
+        //validate the input 
+        if (scanf("%d", &choice) != 1) {//insure user inters a number 
+            printf("Invalid input Please fix it \n");
+            while (getchar() != '\n'); // clear input buffer 
             continue;
         }
-        while (getchar() != '\n');
+        while (getchar() != '\n'); // clear newline from buffer// clear leftover newline 
 
+        // User Choices 
         switch (choice) {
-        case 1: append_text(); break;
-        case 2: insert_text(); break;
-        case 3: clear_file(); break;
-        case 4: show_file(); break;
-        case 5: exit(0);
-        default: printf("Invalid choice.\n");
+        case 1:
+            append_text();//appened text to file 
+            break;
+        case 2:
+            insert_text();// insert text to file 
+            break;
+        case 3:
+            clear_file();// remove the file contents 
+            break;
+        case 4:
+            show_file();// display file with pagination 
+            break;
+        case 5: // HELP OPTION 
+            Text_Functions_Help(0);  // global help for Text Functions
+            break;
+        case 6:
+            return;  // exit text functions menu
+        default:
+            printf("Invalid choice.\n");
         }
         printf("\n");
     }
-
-    //return 0;
 }
-
-// ========================
+//Append, insert, clear, show 
 // FUNCTION DEFINITIONS
 
-
+//Append text to the end of a file 
 void append_text() {
-    char filename[256];
-    char text[1024];
+    char filename[256]; // stores file name 
+    char text[1024]; //stores text to append 
 
-    printf("Enter filename: ");
+    printf("Enter filename (or /h for help): ");
     fgets(filename, sizeof(filename), stdin);
-    filename[strcspn(filename, "\n")] = 0;
+    filename[strcspn(filename, "\n")] = 0;//remove newline 
 
+    // Call help if user enters /h
+    if (strcmp(filename, "/h") == 0) {
+        Text_Functions_Help(5);  // append help
+        return;
+    }
+
+    //get the text from the user to append 
     printf("Enter text to append: ");
     fgets(text, sizeof(text), stdin);
 
+    
+    //a, append ( open file to add at the end without deleting) 
     FILE* file = fopen(filename, "a");
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
 
+    //write text to file and then closes the file 
     fprintf(file, "%s", text);
     fclose(file);
     printf("Text appended.\n");
 }
 
+//Insert text at a specific character position in a file 
 void insert_text() {
     char filename[256];
-    char text[1024];
-    int position;
+    char text[1024];//text to insert 
+    int position;//character index where the text willl be inserted 
 
-    printf("Enter filename: ");
+    printf("Enter filename (or /h for help): ");
     fgets(filename, sizeof(filename), stdin);
     filename[strcspn(filename, "\n")] = 0;
+
+    if (strcmp(filename, "/h") == 0) {
+        Text_Functions_Help(6);  // insert help
+        return;
+    }
 
     printf("Enter text to insert: ");
     fgets(text, sizeof(text), stdin);
 
-    printf("Enter position (character index): ");
-    scanf("%d", &position);
-    while (getchar() != '\n');
+    printf("Enter position (character index): ");//0=start, 1=after first character 
+    scanf_s("%d", &position);//get insertion index 
+    while (getchar() != '\n');// clear buffer 
 
+    //r+ read + write ( open file to read and edit ) 
     FILE* file = fopen(filename, "r+");
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
+    //to determine the file size 
+    fseek(file, 0, SEEK_END);// move pointer to the end of the file 
+    long filesize = ftell(file);//the pointer location 
 
-    fseek(file, 0, SEEK_END);
-    long filesize = ftell(file);
-
+    //to insure position is within file bounds // if it is, it will insert at the end of the file 
     if (position > filesize) position = filesize;
 
+    //to allocate buffer for content after insertion point 
     char* buffer = malloc(filesize - position + 1);
     fseek(file, position, SEEK_SET);
-    fread(buffer, 1, filesize - position, file);
+    fread(buffer, 1, filesize - position, file);//read remaining content 
 
+    //write new text at position, then remaining content 
+    //write the new text first 
+    //then write the original content after insertion 
     fseek(file, position, SEEK_SET);
     fwrite(text, 1, strlen(text), file);
     fwrite(buffer, 1, filesize - position, file);
 
+    //free memory
     free(buffer);
     fclose(file);
-
     printf("Text inserted.\n");
 }
 
+//clear all content from a file 
 void clear_file() {
-    char filename[256];
+    char filename[256];// name of the file 
 
-    printf("Enter filename: ");
-    fgets(filename, sizeof(filename), stdin);
-    filename[strcspn(filename, "\n")] = 0;
+    printf("Enter filename (or /h for help): ");
+    fgets(filename, sizeof(filename), stdin);// read input including \n 
+    filename[strcspn(filename, "\n")] = 0;// find the newline and replace it with null 
 
+    if (strcmp(filename, "/h") == 0) {
+        Text_Functions_Help(7);  // clear help
+        return;
+    }
+
+    //w, write ( open file to earse everthing and start )
     FILE* file = fopen(filename, "w");
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
 
+    //close the file to release 
     fclose(file);
     printf("File cleared.\n");
 }
 
+//to display file contents with pagination 
 void show_file() {
-    char filename[256];
-    int lines_per_page;
+    char filename[256];// file name 
+    int lines_per_page;// number of lines to hsow before pausing for the user 
 
-    printf("Enter filename: ");
-    fgets(filename, sizeof(filename), stdin);
-    filename[strcspn(filename, "\n")] = 0;
+    printf("Enter filename (or /h for help): ");
+    fgets(filename, sizeof(filename), stdin);//reads input (including newline).
+    filename[strcspn(filename, "\n")] = 0;//remove newline 
+
+    if (strcmp(filename, "/h") == 0) {
+        Text_Functions_Help(8);  // show file help
+        return;
+    }
 
     printf("Enter number of lines per page: ");
-    scanf("%d", &lines_per_page);
-    while (getchar() != '\n');
+    scanf_s("%d", &lines_per_page);
+    //clears the input buffer , leftover characters don’t interfere with later input
+    while (getchar() != '\n');//clear buffer 
 
+    //r , read ( open file and read )
     FILE* file = fopen(filename, "r");
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
 
-    char line[1024];
-    int count = 0;
+    char line[1024];// buffer to store each line read 
+    int count = 0;//track how man lines have been displayed since last pause 
 
-    while (fgets(line, sizeof(line), file)) {
+    //Read file line by line 
+    while (fgets(line, sizeof(line), file)) {//reads one line at a time from the file.
         printf("%s", line);
         count++;
 
+        //pause after the specified number of lines 
         if (count == lines_per_page) {
             printf("Press Enter to continue...");
             getchar();
