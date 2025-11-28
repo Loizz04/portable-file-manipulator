@@ -138,8 +138,7 @@ void append_text() {
         return;
     }
 
-    //write text to file and then closes the file 
-    fprintf(file, "%s", text);
+    fprintf(file, "%s", text);//write text to file 
     fclose(file);
     printf("Text appended.\n");
 }
@@ -147,8 +146,8 @@ void append_text() {
 //Insert text at a specific character position in a file 
 void insert_text() {
     char filename[256];
-    char text[1024];//text to insert 
-    int position;//character index where the text willl be inserted 
+    char text[1024];
+    int position;
 
     printf("Enter filename (or /h for help): ");
     fgets(filename, sizeof(filename), stdin);
@@ -162,7 +161,7 @@ void insert_text() {
     printf("Enter text to insert: ");
     fgets(text, sizeof(text), stdin);
 
-    printf("Enter position (character index): ");//0=start, 1=after first character 
+    printf("Enter position (character index): ");
     scanf_s("%d", &position);//get insertion index 
     while (getchar() != '\n');// clear buffer 
 
@@ -172,10 +171,10 @@ void insert_text() {
         return;
     }
     //to determine the file size 
-    fseek(file, 0, SEEK_END);// move pointer to the end of the file 
+    fseek(file, 0, SEEK_END);
     long filesize = ftell(file);
 
-    //to insure position is within file bounds // if it is it will insert at the end of the file 
+    //to insure position is within file bounds 
     if (position > filesize) position = filesize;
 
     //to allocate buffer for content after insertion point 
@@ -184,51 +183,46 @@ void insert_text() {
     fread(buffer, 1, filesize - position, file);//read remaining content 
 
     //write new text at position, then remaining content 
-    //write the new text first 
-    //then write the original content after insertion 
     fseek(file, position, SEEK_SET);
     fwrite(text, 1, strlen(text), file);
     fwrite(buffer, 1, filesize - position, file);
 
-    //free memory
     free(buffer);
     fclose(file);
+
     printf("Text inserted.\n");
 }
-
 //clear all content from a file 
 void clear_file() {
-    char filename[256];// name of the file 
+    char filename[256];
 
     printf("Enter filename (or /h for help): ");
-    fgets(filename, sizeof(filename), stdin);// read input including \n 
-    filename[strcspn(filename, "\n")] = 0;// find the newline and replace it with null 
+    fgets(filename, sizeof(filename), stdin);
+    filename[strcspn(filename, "\n")] = 0;
 
     if (strcmp(filename, "/h") == 0) {
         Text_Functions_Help(7);  // clear help
         return;
     }
 
-    //
     FILE* file = fopen(filename, "w");//open file in write mode, turncates file 
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
 
-    //close the file to release 
     fclose(file);
     printf("File cleared.\n");
 }
 
 //to display file contents with pagination 
 void show_file() {
-    char filename[256];// file name 
-    int lines_per_page;// number of lines to hsow before pausing for the user 
+    char filename[256];
+    int lines_per_page;
 
     printf("Enter filename (or /h for help): ");
-    fgets(filename, sizeof(filename), stdin);//reads input (including newline).
-    filename[strcspn(filename, "\n")] = 0;//remove newline 
+    fgets(filename, sizeof(filename), stdin);
+    filename[strcspn(filename, "\n")] = 0;
 
     if (strcmp(filename, "/h") == 0) {
         Text_Functions_Help(8);  // show file help
@@ -237,7 +231,6 @@ void show_file() {
 
     printf("Enter number of lines per page: ");
     scanf_s("%d", &lines_per_page);
-    //clears the input buffer , leftover characters don’t interfere with later input
     while (getchar() != '\n');//clear buffer 
 
     FILE* file = fopen(filename, "r");//open file for reading 
@@ -246,11 +239,11 @@ void show_file() {
         return;
     }
 
-    char line[1024];// buffer to store each line read 
-    int count = 0;//track how man lines have been displayed since last pause 
+    char line[1024];
+    int count = 0;
 
     //Read file line by line 
-    while (fgets(line, sizeof(line), file)) {//reads one line at a time from the file.
+    while (fgets(line, sizeof(line), file)) {
         printf("%s", line);
         count++;
 
