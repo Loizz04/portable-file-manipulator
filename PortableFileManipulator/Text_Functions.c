@@ -20,7 +20,7 @@
 #include <string.h>
 
 // Provides help for all text file operations
-void Text_Functions_Help(int mode) {
+static void Text_Functions_Help(int mode) {
     switch (mode) {
     case 0: // Main Text Functions menu
         printf("=== Text Functions Help ===\n");

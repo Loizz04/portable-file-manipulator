@@ -59,7 +59,6 @@ int main() {
 
         case 4:
             helpfunction(0);  // global help
-
             break;
 
         case 5:
