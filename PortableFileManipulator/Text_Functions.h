@@ -19,7 +19,7 @@ void insert_text(void);
 void clear_file(void);
 void show_file(void);
 
-// Declare the global helpfunction()
-void helpfunction(int mode);
+// Declare the global  Text_Functions_Help()
+void Text_Functions_Help(int mode);
 
 #endif // TEXT_FUNCTIONS_H

@@ -131,7 +131,8 @@ void append_text() {
     printf("Enter text to append: ");
     fgets(text, sizeof(text), stdin);
 
-    //open file in append mode 
+    
+    //a, append ( open file to add at the end without deleting) 
     FILE* file = fopen(filename, "a");
     if (!file) {
         printf("Cannot open file.\n");
@@ -166,16 +167,17 @@ void insert_text() {
     scanf_s("%d", &position);//get insertion index 
     while (getchar() != '\n');// clear buffer 
 
-    FILE* file = fopen(filename, "r+");// open file for reading and writing 
+    //r+ read + write ( open file to read and edit ) 
+    FILE* file = fopen(filename, "r+");
     if (!file) {
         printf("Cannot open file.\n");
         return;
     }
     //to determine the file size 
     fseek(file, 0, SEEK_END);// move pointer to the end of the file 
-    long filesize = ftell(file);
+    long filesize = ftell(file);//the pointer location 
 
-    //to insure position is within file bounds // if it is it will insert at the end of the file 
+    //to insure position is within file bounds // if it is, it will insert at the end of the file 
     if (position > filesize) position = filesize;
 
     //to allocate buffer for content after insertion point 
@@ -209,8 +211,8 @@ void clear_file() {
         return;
     }
 
-    //
-    FILE* file = fopen(filename, "w");//open file in write mode, turncates file 
+    //w, write ( open file to earse everthing and start )
+    FILE* file = fopen(filename, "w");
     if (!file) {
         printf("Cannot open file.\n");
         return;
@@ -240,7 +242,8 @@ void show_file() {
     //clears the input buffer , leftover characters don’t interfere with later input
     while (getchar() != '\n');//clear buffer 
 
-    FILE* file = fopen(filename, "r");//open file for reading 
+    //r , read ( open file and read )
+    FILE* file = fopen(filename, "r");
     if (!file) {
         printf("Cannot open file.\n");
         return;
