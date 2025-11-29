@@ -73,7 +73,8 @@ static void helpfunction(int mode) {
         printf("  - Use this option to change a file's name and/or location.\n");
         printf("  - You will be asked for:\n");
         printf("      1) CURRENT path of the file.\n");
-        printf("      2) NEW path for the file.\n");
+        printf("      2) NEW name for the file.\n");
+        printf("  - Ensure the path exists");
         break;
 
     case 3:
@@ -84,6 +85,7 @@ static void helpfunction(int mode) {
         printf("      2) DESTINATION path/name to copy to.\n");
         printf("  - The program opens the source file in binary mode, reads data into a buffer, and writes it to the destination file entered\n");
         printf("  - Rememeber if the destination file already exists, it will be overwritten\n");
+        printf("  - If a specific file path is not defined, the copy of the file will be created in the local diretory\n");
         break;
 
     case 4:
@@ -154,12 +156,12 @@ int deleteFile(const char* filePath) {
     }
 
     if (remove(filePath) == 0) {
-        printf("Successfully deleted file %s \n\n", filePath);
+        printf("\nSuccessfully deleted file %s \n\n", filePath);
         return 0;
     }
     else {
         perror("remove");
-        printf("Failed to delete file '%s'\n\n", filePath);
+        printf("\nFailed to delete file '%s'\n\n", filePath);
         return -1;
     }
 }
@@ -167,8 +169,8 @@ int deleteFile(const char* filePath) {
 //rename file function
 int renameFile(const char* oldName, const char* newName) {
     //check for invalid
-    if (!oldName||!newName|| oldName[0] == '\0' || newName[0] == '\0') {
-        printf("renameFile: invalid old or new name.\n");
+    if (!oldName || !newName || oldName[0] == '\0' || newName[0] == '\0') {
+        printf("\nrenameFile: invalid old or new name.\n");
         return -1;
     }
 
@@ -201,8 +203,8 @@ int copyFile(const char* sourcePath, const char* destPath) {
     size_t bytesWritten;
 
     //check for invalid or null paths
-    if (!sourcePath||!destPath|| sourcePath[0] == '\0' || destPath[0] == '\0') {
-        printf("copyFile: invalid source or destination path.\n");
+    if (!sourcePath || !destPath || sourcePath[0] == '\0' || destPath[0] == '\0') {
+        printf("\ncopyFile: invalid source or destination path.\n");
         return -1;
     }
     //check for illegal charecters in source path
@@ -219,21 +221,21 @@ int copyFile(const char* sourcePath, const char* destPath) {
     //open source file
     sourceFile = fopen(sourcePath, "rb");
     //check error during open
-    if (sourceFile == NULL ) {
+    if (sourceFile == NULL) {
         perror("fopen source");
-        printf("Failed to open source file '%s'\n\n", sourcePath);
+        printf("\nFailed to open source file '%s'\n\n", sourcePath);
         return -1;
     }
     //open destination file
     destFile = fopen(destPath, "wb");
-    
+
     //copying bytes from source file to detination file 
     while ((bytesRead = fread(buffer, 1, sizeof(buffer), sourceFile)) > 0) {
         bytesWritten = fwrite(buffer, 1, bytesRead, destFile);
         //catches write errors
         if (bytesWritten != bytesRead) {
             perror("fwrite");
-            printf("\nWrite error while copying '%s' to '%s'\n\n",sourcePath, destPath);
+            printf("\nWrite error while copying '%s' to '%s'\n\n", sourcePath, destPath);
             fclose(sourceFile);
             fclose(destFile);
             return -1;
@@ -258,7 +260,7 @@ int copyFile(const char* sourcePath, const char* destPath) {
 //function to move a file
 int moveFile(const char* sourcePath, const char* destPath) {
 
-    if (!sourcePath||!destPath|| sourcePath[0] == '\0' || destPath[0] == '\0') {
+    if (!sourcePath || !destPath || sourcePath[0] == '\0' || destPath[0] == '\0') {
         printf("moveFile: invalid path.\n");
         return -1;
     }
@@ -272,13 +274,23 @@ int moveFile(const char* sourcePath, const char* destPath) {
         return -1;
     }
 
+    // do not overwrite an existing destination file
+    {
+        FILE* testFile = fopen(destPath, "rb");
+        if (testFile != NULL) {
+            fclose(testFile);
+            printf("\nmoveFile: destination file '%s' already exists. Move aborted.\n\n", destPath);
+            return -1;
+        }
+    }
+
     if (copyFile(sourcePath, destPath) != 0) {
-        printf("moveFile: copy failed.\n");
+        printf("\nmoveFile: copy failed.\n");
         return -1;
     }
 
     if (deleteFile(sourcePath) != 0) {
-        printf("moveFile: delete failed.\n");
+        printf("\nmoveFile: delete failed.\n");
         return -1;
     }
 
@@ -291,7 +303,13 @@ void Edit_Existing_File() {
     int choice;
     char sourcePath[256];
     char destPath[256];
+    char choiceinp[32];
     int c;
+
+    //clear leftover newline from previous input (e.g., main menu scanf)
+    while ((c = getchar()) != '\n' && c != EOF) {
+        //discard
+    }
 
     while (1) {
         printf("\n====Edit Existing File Menu====\n");
@@ -305,24 +323,51 @@ void Edit_Existing_File() {
         printf("\nEnter your choice (1-6): ");
 
         //takes bad input, clears stdin and retakes user input
-        if (scanf("%d", &choice) != 1) {
+        if (!fgets(choiceinp, sizeof(choiceinp), stdin)) {
             printf("\nInvalid Input, enter number from 1-6\n");
-            while ((c = getchar()) != '\n' && c != EOF) {
-                //discard 
+            continue;
+        }
+        choiceinp[strcspn(choiceinp, "\n")] = '\0';
+        int valid = 1;
+        if (choiceinp[0] == '\0') {
+            valid = 0;
+        }
+        for (int i = 0; choiceinp[i] != '\0'; i++) {
+            if (choiceinp[i] < '0' || choiceinp[i] > '9') {
+                valid = 0;
+                break;
             }
+        }
+
+        if (valid) {
+            choice = atoi(choiceinp);
+        }
+        else {
+            choice = -1;
+        }
+        if (choice < 1 || choice > 6) {
+            printf("\nInvalid Input, enter number from 1-6\n");
             continue;
         }
 
+
         if (choice == 6) {
-            printf("Returning to main menu\n");
+            printf("\nReturning to main menu\n");
             break;
         }
 
         switch (choice) {
         case 1:
+
             printf("Enter path of file to delete (or /h for delete help): ");
-            scanf("%255s", sourcePath);
+            if (!fgets(sourcePath, sizeof(sourcePath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            sourcePath[strcspn(sourcePath, "\n")] = '\0';
+            //strip quotes
             stripQuotesIfWindows(sourcePath);
+
             if (strcmp(sourcePath, "/h") == 0) {
                 helpfunction(1);   // delete help
                 continue;          // back to menu
@@ -330,20 +375,36 @@ void Edit_Existing_File() {
             deleteFile(sourcePath);
             break;
 
+
         case 2:
+
             printf("Enter the CURRENT path of the file (or /h for rename help): ");
-            scanf("%255s", sourcePath);
+            //fgets
+            if (!fgets(sourcePath, sizeof(sourcePath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            sourcePath[strcspn(sourcePath, "\n")] = '\0';
+            //strip quotes
             stripQuotesIfWindows(sourcePath);
+
             if (strcmp(sourcePath, "/h") == 0) {
                 helpfunction(2);   // rename help
                 continue;
             }
+            printf("\n");
 
-            printf("Enter the NEW path for the file (or /h for rename help): ");
-            scanf("%255s", destPath);
+            printf("Enter the NEW name for the file (or /h for rename help): ");
+            if (!fgets(destPath, sizeof(destPath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            destPath[strcspn(destPath, "\n")] = '\0';
+
             stripQuotesIfWindows(destPath);
+
             if (strcmp(destPath, "/h") == 0) {
-                helpfunction(2);   
+                helpfunction(2);
                 continue;
             }
 
@@ -352,18 +413,30 @@ void Edit_Existing_File() {
 
         case 3:
             printf("\nEnter the SOURCE file path to COPY (or /h for help): ");
-            scanf("%255s", sourcePath);
+            if (!fgets(sourcePath, sizeof(sourcePath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            sourcePath[strcspn(sourcePath, "\n")] = '\0';
+
             stripQuotesIfWindows(sourcePath);
+
             if (strcmp(sourcePath, "/h") == 0) {
                 helpfunction(3);   // copy help
                 continue;
             }
 
             printf("\nEnter the DESTINATION path / name of file (or /h for help): ");
-            scanf("%255s", destPath);
+            if (!fgets(destPath, sizeof(destPath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            destPath[strcspn(destPath, "\n")] = '\0';
+
             stripQuotesIfWindows(destPath);
+
             if (strcmp(destPath, "/h") == 0) {
-                helpfunction(3);   
+                helpfunction(3);
                 continue;
             }
 
@@ -372,7 +445,11 @@ void Edit_Existing_File() {
 
         case 4:
             printf("\nEnter the SOURCE file path to MOVE (or /h for help): ");
-            scanf("%255s", sourcePath);
+            if (!fgets(sourcePath, sizeof(sourcePath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            sourcePath[strcspn(sourcePath, "\n")] = '\0';
             stripQuotesIfWindows(sourcePath);
             if (strcmp(sourcePath, "/h") == 0) {
                 helpfunction(4);   // move help
@@ -380,7 +457,11 @@ void Edit_Existing_File() {
             }
 
             printf("\nEnter the DESTINATION path/name (or /h for help): ");
-            scanf("%255s", destPath);
+            if (!fgets(destPath, sizeof(destPath), stdin)) {
+                printf("Input error.\n");
+                break;
+            }
+            destPath[strcspn(destPath, "\n")] = '\0';
             stripQuotesIfWindows(destPath);
             if (strcmp(destPath, "/h") == 0) {
                 helpfunction(4);
@@ -395,6 +476,7 @@ void Edit_Existing_File() {
             break;
 
         default:
+
             printf("Invalid choice. Enter a number from 1-6.\n\n");
             break;
         }
