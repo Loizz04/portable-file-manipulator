@@ -35,5 +35,8 @@
     <ClInclude Include="CreateFile.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Text_Functions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
